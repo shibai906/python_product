@@ -2,6 +2,7 @@
 target/
 output/
 log/
+code/
 # *.jar
 *.war
 *.zip
