@@ -18,14 +18,11 @@ def delete():
     delete_api.delete('drop measurement content', bucket='syslog')
 
 def pri():
-  #   tables = query_api.query("""from(bucket: "syslog")
-  # |> range(start: -48h)
-  # |> set(key: "_value", value: "1.0")
-  # |> filter(fn: (r) => r._measurement == "content")
-  # |> filter(fn: (r) => r["logName"] != "SwapSyncEventChaserTask.executeTask blockTime!" and r["logName"] != "SwapSnapshotEventChaserTask.executeTask blockTime!")
-  # |> group(columns: ["logName"])
-  # |> sum()""")
-    tables = query_api.query('from(bucket: "syslog") |> range(start: -1h)')
+    tables = query_api.query("""from(bucket: "sysLog")
+   |> range(start: -2h)
+   |> filter(fn: (r) => r._measurement == "content")
+   |> filter(fn: (r) => r["logName"] == "SwapSyncEventChaserTask.executeTask blockTime")""")
+  #   tables = query_api.query('from(bucket: "syslog") |> range(start: -1h)')
     for table in tables:
         print(table)
         for row in table.records:
@@ -76,6 +73,8 @@ def getTime(line):
 #     #          print(p)
 #     write_api.write('syslog', 'influxdata-org', p)
 
+# {'result': '_result', 'table': 12, '_start': datetime.datetime(2022, 9, 22, 1, 16, 37, 46068, tzinfo=tzutc()), '_stop': datetime.datetime(2022, 9, 22, 3, 16, 37, 46068, tzinfo=tzutc()), '_time': datetime.datetime(2022, 9, 22, 3, 14, 18, tzinfo=tzutc()), '_value': 1.0, '_field': 'value', '_measurement': 'transaction_pv', 'isRobot': 'true', 'version': 'v2'}
+# {'result': '_result', 'table': 1946, '_start': datetime.datetime(2022, 9, 22, 1, 25, 12, 144566, tzinfo=tzutc()), '_stop': datetime.datetime(2022, 9, 22, 3, 25, 12, 144566, tzinfo=tzutc()), '_time': datetime.datetime(2022, 9, 22, 1, 28, 36, tzinfo=tzutc()), '_value': 1663810116905.0, '_field': 'value', '_measurement': 'content', 'logName': 'request-scan-getTopPairList', 'product': 'router', 'requestId': 'febecfac-e795-4e15-8748-37b5aa1002d6', 'value': '1663810116905.0'}
 
 if __name__ == '__main__':
     pri()
